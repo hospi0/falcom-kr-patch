@@ -37,6 +37,16 @@ def main():
     G['YS2/0YS2L.BIN'] = L2
     for f, b in D2.items(): G['YS2/' + f] = b
     print('이스 II 본문', yi)
+    # ⑤ 동영상 자막(tools/moviesub.py 가 구운 work/movie/kr/<영상>, 원본 크기 그대로 — 제자리)
+    import moviesub
+    for name, paths in moviesub.DISC.items():
+        p = os.path.join(moviesub.OUT, name)
+        if not os.path.exists(p): continue
+        b = open(p, 'rb').read()
+        for n in paths:
+            assert len(b) == len(disc.read('fc2', n)), ('동영상 크기 다름', n)
+            G[n] = b
+        print('  동영상 자막 %s → %s' % (name, ', '.join(paths)))
     if '--write' in a or '--install' in a:
         os.makedirs(OUT, exist_ok=True)
         dst = os.path.join(OUT, TRACK1); shutil.copyfile(disc.TRACK['fc2'], dst)

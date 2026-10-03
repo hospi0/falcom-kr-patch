@@ -3,7 +3,7 @@
 ## 내려받기
 - 최신 **v0.9** — [릴리즈](https://github.com/hospi0/falcom-kr-patch/releases/latest)에서 `FalcomClassics_KR_v0.9.zip`
 - 대상: `Falcom Classics (Japan) (Disc 1) (Game Disc)` 트랙 01 (트랙 18개)
-- 원본md5 `287ADC660E0D65E5AE3600157DB6C9D5` → 패치md5 `F891D2B6566E66AF456D7D8E94C56123`
+- 원본md5 `287ADC660E0D65E5AE3600157DB6C9D5` → 패치md5 `B648EDEA499F03325920162B049538BC`
 - 이스 I(보통·오리지널 모드) · 제나두 · 드래곤 슬레이어(그림 글자) · 타이틀 메뉴
 
 ## 작업 저장소

@@ -157,7 +157,7 @@ def _wrap_words(body, lim, punct_break):
     return out
 
 
-CUR = {'pos': '', 'src': ''}
+CUR = {'pos': '', 'src': '', 'gap': 0}
 _ALLTR = {}
 YS1_ORIG = (0x7D75C, 0x84E9C)                   # 이스 I 오리지널 모드 문장 묶음(16px 로 바꾼 216×54 창 = 13칸·3줄)
 
@@ -328,16 +328,50 @@ def fit(tr, src, lim, boxl=0, g=None):
             res.append(p); bad.extend(l for l in lines if W(l) > lim)     # 오리지널 모드 선택지(스크립트 op 0x52 가 부르는 문장) — 접지도 나누지도 않음
             if len(lines) > 8: bad.append('집 안 창 8줄 초과 %d' % len(lines))   # 144×142 창, 16px 줄 간격 18 → 8줄(실기 2026-10-03)
             continue
+        if g == 'ys1' and lim == 9.75:
+            # ★오리지널 집 안 창: 원문 앞쪽 «간격용 빈 줄»(12px 시절 배치)은 16px 에선 빈 공간만 커진다(실기 2026-10-04 「당신은 그런 걸」 위 빈 줄 4개)
+            #   → 쪽 머리 빈 줄은 전부 빼고, 이름 줄({FE0} 머리) 아래 빈 줄은 1개만. 빈 줄 안의 제어 코드는 다음 줄 머리로 옮긴다.
+            out, pend, seen, hdr, blank_run = [], '', False, False, 0
+            for l in lines:
+                ctl = ''.join(re.findall(r'\{[0-9A-F]+\}', l))
+                if CTL.sub('', l).strip(' 　') == '' and not seen:
+                    if hdr and blank_run == 0:
+                        out.append(pend + l); pend = ''; blank_run = 1
+                    else:
+                        pend += ctl; CUR['gap'] += 1
+                    continue
+                if l.startswith('{FE0}') and not out and not hdr: hdr = True          # 이름 줄(쪽 첫 줄, {FE0} 머리)
+                else: seen = True                                                    # 본문 시작 — 이 뒤 빈 줄은 문단 구분이라 그대로
+                out.append(pend + l); pend = ''
+            if pend: out.append(pend)
+            lines = out; p = NL.join(lines)
         hard = boxl < 0
         if hard: boxl = -boxl
         if all(W(l) <= lim for l in lines) and not (hard and len(lines) > boxl):
             res.append(p); continue
         maxl = boxl if hard else max(len(sp[i].split(NL)) if i < len(sp) else len(lines), len(lines), boxl)
         w = (lines if all(W(l) <= lim for l in lines) else wrap_page(p, lim, g in ('ys2', 'ys1', 'sun')))
+        if w is not None and g == 'ys1' and lim == 9.75 and len(w) > maxl:
+            # ★오리지널 집 안 창: 원문은 12px·10줄 기준이라 이름 줄 아래 «간격용 빈 줄»을 둔다 → 16px 8줄에 넘치면 그 빈 줄부터 뺀다
+            #   (화면 종류 규칙 — 사용자 2026-10-04 «ㄱ», 오리지널 선택지 간격 빈 줄과 같은 결정). 그래도 넘치면 아래에서 쪽 나눔
+            k = next((j for j, l in enumerate(w) if '{FE2}' in l), None)
+            j = (k or 0) - 1
+            while len(w) > maxl and j >= 1 and CTL.sub('', w[j]).strip(' 　') == '':
+                del w[j]; CUR['gap'] += 1; j -= 1
         if w is not None and len(w) <= maxl:
             res.append(NL.join(w))
         elif w is not None and g in ('ys1', 'sun'):                   # 이스 I: 줄 수 넘치면 쪽 나눔(FFE = 버튼 대기)
             ffb = re.match(r'^(?:\{[0-9A-F]+\})*?(\{FFB\}.)', p)
+            if g == 'ys1' and lim == 9.75:                            # 집 안 창: 나눈 쪽이 빈 줄로 시작하지 않게(빈 줄은 쪽 경계에서 버림, 제어 코드는 다음 줄로)
+                pages, cur, pend = [], [], ''
+                for l in w:
+                    if not cur and pages and CTL.sub('', l).strip(' 　') == '':
+                        pend += ''.join(re.findall(r'\{[0-9A-F]+\}', l)); CUR['gap'] += 1; continue
+                    cur.append(pend + l); pend = ''
+                    if len(cur) == maxl: pages.append(cur); cur = []
+                if cur or pend: pages.append(cur or [pend])
+                res.extend(NL.join(c) for c in pages)
+                continue
             for k in range(0, len(w), maxl):
                 ch = w[k:k + maxl]
                 if k and ffb: ch[0] = ffb.group(1) + ch[0]
@@ -420,7 +454,7 @@ def translations(g, lim=None):
                 tr = tr.replace('{E10}', '　')
             # 원문이 긴 영문 이름을 두 줄로 쪼갠 자리(「ＳＨＯＲＴ／　　　－ＳＷＯＲＤ」) — «한글» 이름이면 한 줄로 붙인다(실기 2026-10-04 「숏/　　소드인가」). 줄 머리 공백 처리 뒤에 해야 줄 번호가 안 어긋남
             tr = re.sub(r'\{FE3\}([^{\\]+?)\\n[ 　]+([^{\\]+?)\{FE4\}', lambda mm: mm.group(0) if not re.search('[가-힣]', mm.group(0)) else '{FE3}' + mm.group(1).strip(' 　') + (' ' if (mm.group(1).strip(' 　') + ' ' + mm.group(2).strip(' 　')) in _ALLTR.setdefault(g, chr(10).join(x['tr'] for x in load_rows(g))) else '') + mm.group(2).strip(' 　') + '{FE4}', tr)
-        CUR['pos'] = r['pos']; CUR['src'] = src
+        CUR['pos'] = r['pos']; CUR['src'] = src; CUR['gap'] = 0
         if g in LINECAP and LINECAP[g](r['no']):
             so, to = src.split(NL), tr.split(NL); bad = []
             if len(to) > len(so): bad.append('줄 수 %d>%d' % (len(to), len(so)))
@@ -437,7 +471,8 @@ def translations(g, lim=None):
             for l in bad: probs.append((r['no'], '폭 넘침 %.1f' % W(l), l))
         orig_choice = g == 'ys1' and r['pos'] in ys1_choices() and YS1_ORIG[0] <= int(r['pos'].split(':')[1], 16) < YS1_ORIG[1]
         for b in token_check(src, tr):
-            if orig_choice and b.startswith('빈 줄'): continue      # 오리지널 선택지 화면은 간격 빈 줄을 뺀다(사용자 결정 2026-10-03, 화면 종류 규칙)
+            if orig_choice and b.startswith('빈 줄'): continue
+            if b.startswith('빈 줄') and CUR['gap'] and (lambda x: x[0] - x[1])([int(v) for v in re.findall(r'\d+', b)]) <= CUR['gap']: continue   # 집 안 창 간격 빈 줄 뺀 만큼(위 fit)      # 오리지널 선택지 화면은 간격 빈 줄을 뺀다(사용자 결정 2026-10-03, 화면 종류 규칙)
             probs.append((r['no'], '원문 토큰', b))
         res[src] = tr
     pa = os.path.join(ROOT, 'work', 'tr_add', g + '.tsv')     # 추출 거름(가나 3자 미만)에 빠진 짧은 문장 — 내가 번역
