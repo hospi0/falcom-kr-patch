@@ -131,6 +131,108 @@ def patch_ys2(D):
     return bytes(out), pairs
 
 
+# ── 이스 II 저장·로드 확인창(DAT00 무압축 4bpp, 2026-10-04 스테이트 save2·load2 VDP1 명령 18·19·20) ──
+#   문구 = 16열 주기 돌 무늬(7‥A) 위에 D 글자 + E 밝은 그림자 · 「＊」(C) 는 원래 자리 그대로 둠
+YS2_ASK = [  # (오프셋, 한글) 168×16
+    (0xD1B8, '로드하시겠습니까?'),
+    (0xD6F8, '세이브하시겠습니까?'),
+    (0xDC38, '갱신하시겠습니까?'),
+    (0xE178, ('세이브하려면', '의 빈 용량이')),     # ＊ = 원문 열 84‥97 그대로
+    (0xE6B8, '필요합니다.'),
+    (0xEBF8, '저장 데이터 관리 화면에서'),
+    (0xF138, '이 기록을 지워 주세요.'),
+]
+YS2_ASK_STAR = (84, 98)
+YS2_YN = 0x12078                                  # 96×16 「はい　いいえ」 바탕(열 32‥55 = 0 구멍)
+YS2_YN_BTN = [(0x11D78, '예'), (0x11EF8, '아니오')]  # 48×16 선택 단추
+YS2_ASK_FONT = 'Galmuri11'
+YS2_DONE = [(0x11378, 128, 40, '세이브했습니다.')]   # 「セーブしました。」 알림(테두리 포함 한 장, 스테이트 saved2 명령 23)
+
+
+def ys2_stone_tile(imgs):
+    """돌 무늬 16×16 복원: 글자색(C·D·E)·0 을 뺀 (행, 열%16) 최빈값"""
+    tile = np.zeros((16, 16), np.uint8)
+    for y in range(16):
+        for ph in range(16):
+            vals = [im[y, x] for im in imgs for x in range(ph, im.shape[1], 16) if im[y, x] not in (0, 12, 13, 14)]
+            v, c = np.unique(vals, return_counts=True); tile[y, ph] = v[np.argmax(c)]
+    return tile
+
+
+def ys2_ask_text(img, s, x0, x1, align='c'):
+    m = line_mask(YS2_ASK_FONT, s, space=5, gap=0)
+    assert m.shape[1] + 1 <= x1 - x0, ('폭 넘침', s, m.shape[1], x1 - x0)
+    x = {'c': x0 + (x1 - x0 - m.shape[1] - 1) // 2, 'r': x1 - m.shape[1] - 1, 'l': x0}[align]; y = 2 + (12 - m.shape[0]) // 2
+    stamp(img, m, x, y, [(1, 1, 14), (0, 0, 13)])
+
+
+def ys2_btn_bg(a, b):
+    """두 단추(はい·いいえ)에서 글자색(F·D·1) 아닌 쪽을 골라 바탕 복원, 둘 다 글자면 이웃 평균"""
+    TXT = (15, 13, 1); h, w = a.shape; bg = a.copy(); hole = np.zeros_like(a, bool)
+    for y in range(1, h - 1):
+        for x in range(1, w - 1):
+            p, q = a[y, x], b[y, x]
+            if p == q and p not in TXT: bg[y, x] = p
+            elif p not in TXT and q in TXT: bg[y, x] = p
+            elif q not in TXT and p in TXT: bg[y, x] = q
+            elif p != q: bg[y, x] = p if (y < 2 or y > 12) else q; hole[y, x] = (p in TXT and q in TXT) or not (y < 2 or y > 12)
+            else: hole[y, x] = True
+    for _ in range(4):                               # 구멍은 좌우 이웃으로 메움
+        for y, x in zip(*np.nonzero(hole)):
+            nb = [bg[y, xx] for xx in (x - 1, x + 1, x - 2, x + 2) if 0 < xx < w - 1 and not hole[y, xx]]
+            if nb:
+                bg[y, x] = int(round(np.median(nb))); hole[y, x] = False
+    return bg
+
+
+def patch_ys2_ask(D):
+    out = bytearray(D); pairs = []
+    olds = [from4(D[o:o + 168 * 8], 168, 16) for o, _ in YS2_ASK]
+    yn = from4(D[YS2_YN:YS2_YN + 96 * 8], 96, 16)
+    tile = ys2_stone_tile(olds + [yn])
+    full = np.tile(tile, (1, 11))
+    for (o, s), old in zip(YS2_ASK, olds):
+        img = full[:, :168].copy()
+        if isinstance(s, tuple):
+            a0, a1 = YS2_ASK_STAR; img[:, a0:a1] = old[:, a0:a1]
+            ink = np.nonzero((old[:, a0:a1] == 12).any(0))[0] + a0          # 구워진 숫자 「4」(C)
+            l0 = ink[0] - 5; r0 = ink[-1] + 3
+            img[:, :ink[0] - 1] = full[:, :ink[0] - 1]; img[:, ink[-1] + 3:] = full[:, ink[-1] + 3:168]
+            wl = line_mask(YS2_ASK_FONT, s[0], space=5, gap=0).shape[1] + 1; wr = line_mask(YS2_ASK_FONT, s[1], space=5, gap=0).shape[1] + 1
+            sh = ((l0 - wl) - (168 - r0 - wr)) // 2                          # 묶음 전체를 가운데로: 「4」를 옮길 수 있게 옛 열을 통째로 이동
+            img[:, a0:a1] = full[:, a0:a1]                                   # 「4」 글자 화소(C·D·E)만 sh 만큼 옮겨 찍음(바탕 무늬 위상 유지)
+            ys_, xs_ = np.nonzero(np.isin(old[:, ink[0] - 1:ink[-1] + 3], (12, 13, 14)))
+            img[ys_, xs_ + ink[0] - 1 - sh] = old[ys_, xs_ + ink[0] - 1]
+            ys2_ask_text(img, s[0], 0, l0 - sh, 'r'); ys2_ask_text(img, s[1], r0 - sh, 168, 'l')
+        else:
+            ys2_ask_text(img, s, 0, 168)
+        out[o:o + 168 * 8] = to4(img); pairs.append((old, img, s if isinstance(s, str) else '＊'.join(s)))
+    img = full[:, :96].copy(); img[yn == 0] = 0
+    ys2_ask_text(img, '예', 0, 32); ys2_ask_text(img, '아니오', 56, 96)
+    out[YS2_YN:YS2_YN + 96 * 8] = to4(img); pairs.append((yn, img, '예 아니오'))
+    for o, w, h, t in YS2_DONE:                      # 글자 화소(D·E)를 같은 행 ±16열(무늬 주기) 바탕으로 지우고 다시 씀
+        old = from4(D[o:o + w * h // 2], w, h); img = old.copy(); txt = np.isin(old, (13, 14))
+        ys_, xs_ = np.nonzero(txt[4:h - 4, 4:w - 4]); ys_ += 4; xs_ += 4
+        for y, x in zip(ys_, xs_):
+            for d in (16, -16, 32, -32, 48, -48):
+                if 8 <= x + d < w - 8 and not txt[y, x + d]:
+                    img[y, x] = old[y, x + d]; break
+        rows = np.nonzero(txt[4:h - 4, 4:w - 4].any(1))[0] + 4
+        m = line_mask(YS2_ASK_FONT, t, space=5, gap=0)
+        assert m.shape[1] + 1 <= w - 12, ('폭 넘침', t)
+        x = (w - m.shape[1] - 1) // 2; y = (rows[0] + rows[-1] + 1 - m.shape[0]) // 2
+        stamp(img, m, x, y, [(1, 1, 14), (0, 0, 13)])
+        out[o:o + w * h // 2] = to4(img); pairs.append((old, img, t))
+    bo = [from4(D[o:o + 48 * 8], 48, 16) for o, _ in YS2_YN_BTN]
+    bg = ys2_btn_bg(*bo)
+    for (o, s), old in zip(YS2_YN_BTN, bo):
+        img = bg.copy(); m = line_mask(YS2_ASK_FONT, s, space=5, gap=0)
+        x = 1 + (46 - m.shape[1] - 1) // 2; y = 2 + (12 - m.shape[0]) // 2
+        stamp(img, m, x, y, [(1, 1, 13), (0, 0, 15)])
+        out[o:o + 48 * 8] = to4(img); pairs.append((old, img, s))
+    return bytes(out), pairs
+
+
 # ── 아스테카 저장 버튼 (SAVE.BIN 112×28, 무압축): 글자 자리를 버튼 바탕 5 로 지우고 F 글자 + 2·3·4 그림자 ──
 def sun_clean_button(b1, b2):
     """두 버튼(같은 모양)에서 글자 없는 기둥을 모아 빈 버튼: 1번 글자 x25‥92, 2번 x16‥96 → 가운데는 바탕 5"""
@@ -235,7 +337,8 @@ def allowed(name):
     if name == 'YS1/0YS1L.DEM':
         return [(d, d + r) for _, d, r, *_ in YS1_L]
     if name == 'YS2/DAT00.BIN':
-        return [(o, o + w * h // 2) for o, w, h, *_ in YS2_DAT00] + [(o, o + w * h // 2) for o, w, h, _ in YS2_SEL]
+        return ([(o, o + w * h // 2) for o, w, h, *_ in YS2_DAT00] + [(o, o + w * h // 2) for o, w, h, _ in YS2_SEL]
+                + [(o, o + 168 * 8) for o, _ in YS2_ASK] + [(YS2_YN, YS2_YN + 96 * 8)] + [(o, o + 48 * 8) for o, _ in YS2_YN_BTN] + [(o, o + w * h // 2) for o, w, h, _ in YS2_DONE])
     if name == 'SUN/SAVE.BIN':
         return [(o, o + 112 * 28 // 2) for o, _ in SUN_SAVE]
     if name in ('SUN/1SUNH.BIN', 'SUN/MD.BIN'):
@@ -264,7 +367,8 @@ def build_fc1(read):
 
 def build_fc2(read):
     out = {}; pairs = []
-    D1, p = patch_ys2(read('YS2/DAT00.BIN')); out['YS2/DAT00.BIN'] = D1; pairs += p
+    D1, p = patch_ys2(read('YS2/DAT00.BIN')); pairs += p
+    D1, p = patch_ys2_ask(D1); out['YS2/DAT00.BIN'] = D1; pairs += p
     S1, p = patch_sun_save(read('SUN/SAVE.BIN')); out['SUN/SAVE.BIN'] = S1; pairs += p
     H1, M1, p = patch_sun_popups(read('SUN/1SUNH.BIN'), read('SUN/MD.BIN')); out['SUN/1SUNH.BIN'] = H1; out['SUN/MD.BIN'] = M1; pairs += p
     T1, _ = patch_lt013(read('SUN/LT_013.BIN')); out['SUN/LT_013.BIN'] = T1
@@ -285,7 +389,7 @@ def state_pal(state, colr, mode):
 
 
 PALS = {'ys2sel': ('y8', 0x7180, 0), 'ys1': ('s6', 0x1C9C, 1), 'ys2': ('y5', 0x1C8C, 1), 'ys2s': ('y7', 0x7190, 0),
-        'sun_save': ('a1', 0x1D54, 1), 'sun_popup': ('a2', 0x1D6C, 1)}
+        'ys2ask': ('save2', 0x01B0, 0), 'ys2btn': ('save2', 0x01C0, 0), 'sun_save': ('a1', 0x1D54, 1), 'sun_popup': ('a2', 0x1D6C, 1)}
 
 
 # ── 비교 그림 ──────────────────────────────────────────────────────────────
@@ -307,6 +411,7 @@ def main():
     rd = lambda p: open(os.path.join(DISC, p), 'rb').read()
     L1, D1, p1 = patch_ys1(rd('fc1/YS1_0YS1L.BIN'), rd('fc1/ys1/0YS1L.DEM')); sheet(p1, 'ys1')
     _, p2 = patch_ys2(rd('fc2/ys2/DAT00.BIN')); sheet(p2[:2], 'ys2'); sheet(p2[2:4], 'ys2s'); sheet(p2[4:], 'ys2sel')
+    _, p5 = patch_ys2_ask(rd('fc2/ys2/DAT00.BIN')); sheet(p5[:8], 'ys2ask'); sheet(p5[8:9], 'ys2done', 'ys2ask'); sheet(p5[9:], 'ys2btn')
     _, p3 = patch_sun_save(rd('fc2/sun/SAVE.BIN')); sheet(p3, 'sun_save')
     _, _, p4 = patch_sun_popups(rd('fc2/SUN_1SUNH.BIN'), rd('fc2/sun/MD.BIN')); sheet(p4, 'sun_popup')
     print('이스I %d · 이스II %d · 아스테카 버튼 %d · 팝업 %d' % (len(p1), len(p2), len(p3), len(p4)))

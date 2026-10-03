@@ -22,7 +22,7 @@ def _zana_cap(no):
 
 ROWCAP = {'zana': _zana_cap}
 LINECAP = {'zana': lambda no: 7 <= int(no) <= 158}   # 가게·도장·아이템: 줄마다 원문 그 줄 길이까지(도장·가게 창이 글 위에 겹침, 실기 스샷) — 자동 접기 안 함
-SPW = {'zana': 1.0, 'ys1': 1.0, 'ys2': 0.75, 'sun': 1.0}                       # 이스 II: 공백 = 전각 0x000(16px) — E10/E08 은 «멈춤»(실기 스샷: 줄 머리 E10 이 들여쓰기 안 됨)                                   # 제나두는 반각 공백 코드가 없어 빈 칸(12px) = 1칸
+SPW = {'zana': 1.0, 'ys1': 1.0, 'ys2': 1.0, 'sun': 1.0}                       # 이스 II: 공백 = 전각 0x000(16px) — E10/E08 은 «멈춤»(실기 스샷: 줄 머리 E10 이 들여쓰기 안 됨)                                   # 제나두는 반각 공백 코드가 없어 빈 칸(12px) = 1칸
 PUNCT = set(',.!?:;)]}\'"~、。，．！？：；）］｝」』】〉》”’…‥・·～〜♪♥')
 
 
@@ -435,7 +435,7 @@ def depunct(s):
 
 def translations(g, lim=None):
     """→ {원문: 번역}(고침·접기·부호 공백 처리 끝난 것), 문제 목록"""
-    lim0 = lim or CAP[g]; fx = load_fix(g); terms = load_terms(g); res = {}; probs = []; SP[0] = SPW.get(g, 0.5); LAT[0] = 0.75 if g in ('ys1', 'ys2') else 1.0; FWSP[0] = 0.75 if g == 'ys2' else 1.0
+    lim0 = lim or CAP[g]; fx = load_fix(g); terms = load_terms(g); res = {}; probs = []; SP[0] = SPW.get(g, 0.5); LAT[0] = 0.75 if g in ('ys1', 'ys2') else 1.0; FWSP[0] = 1.0  # ★이스 II 공백 0x000 = 16px 한 칸(2026-10-04 실기 레구스 대사: 글자 시작 간격으로 재면 정확히 1칸 — 옛 0.6칸은 잉크 틈을 잰 오측. 0.75 로 세면 16칸 넘쳐 엔진이 «부탁|이|있네» 로 되접음)
     for r in load_rows(g):
         lim = ROWCAP[g](r['no']) if g in ROWCAP and lim0 == CAP[g] else lim0
         src, tr = r['src'], r['tr']
