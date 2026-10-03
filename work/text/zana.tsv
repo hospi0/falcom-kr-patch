@@ -1,0 +1,275 @@
+번호	파일	오프셋	끝	원문	번역
+zana0001	1ZANAH.BIN	92218	92246	このデータは無くなりますが\nよろしいですか？	
+zana0002	1ZANAH.BIN	92246	9228A	このままではセーブできません\nセーブには３２１の空きが\n必要です。	
+zana0003	1ZANAH.BIN	9228A	922BE	このままではセーブできません\nこのまま続けますか？	
+zana0004	1ZANAH.BIN	922BE	922E8	レベルが足りないのでドアが\n閉じています	
+zana0005	1ZANAH.BIN	922E8	92302	ここではセーブできません	
+zana0006	1ZANAH.BIN	92302	9231C	ここではセーブできません	
+zana0007	1ZANAH.BIN	9231C	92336	戦闘中はセーブできません	
+zana0008	1ZANAH.BIN	92336	92350	戦闘中はセーブできません	
+zana0009	1ZANAH.BIN	9235C	92370	いらっしゃいませ。	
+zana0010	1ZANAH.BIN	92384	9239E	ありがとうございました。	
+zana0011	1ZANAH.BIN	923B0	923C6	これ以上買えません。	
+zana0012	1ZANAH.BIN	923E8	923FC	お金がたりません。	
+zana0013	1ZANAH.BIN	92418	92440	これいじょう　トレーニングできません。	
+zana0014	1ZANAH.BIN	9245E	92470	どうなさいますか	
+zana0015	1ZANAH.BIN	92486	92492	おだいじに	
+zana0016	1ZANAH.BIN	924A0	924C4	ちりょうのひつよう\nはありません。	
+zana0017	1ZANAH.BIN	924D2	924E0	治療の書用は	
+zana0018	1ZANAH.BIN	924EC	924F6	Ｇです。	
+zana0019	1ZANAH.BIN	9250C	9251E	装備しています。	
+zana0020	1ZANAH.BIN	92540	9255C	戦士レベルが上がりました。	
+zana0021	1ZANAH.BIN	9257C	92598	魔法レベルが上がりました。	
+zana0022	1ZANAH.BIN	925B4	925C4	次のレベルまで	
+zana0023	1ZANAH.BIN	9260A	9262A	「カルマ」をせおいし、勇者よ！	
+zana0024	1ZANAH.BIN	9262A	9267C	「カルマ」を持つ者は\nレベルアップの資格を持たぬ！\n即刻、我が寺院より立ち去れ！	
+zana0025	1ZANAH.BIN	9268E	9269A	あなたは　	
+zana0026	1ZANAH.BIN	9269E	926AE	になりました。	
+zana0027	1ZANAH.BIN	926BE	926C8	を買う。	
+zana0028	1ZANAH.BIN	926DA	926E4	を売る。	
+zana0029	1ZANAH.BIN	92804	9280C	ナイフ	
+zana0030	1ZANAH.BIN	9280C	9281C	ショートソード	
+zana0031	1ZANAH.BIN	9281C	92824	スピア	
+zana0032	1ZANAH.BIN	92824	92834	ハンドアックス	
+zana0033	1ZANAH.BIN	92834	92842	ロングソード	
+zana0034	1ZANAH.BIN	92842	92852	バトルアックス	
+zana0035	1ZANAH.BIN	92852	92860	バトルソード	
+zana0036	1ZANAH.BIN	92860	92872	モーニングスター	
+zana0037	1ZANAH.BIN	92872	9287A	ランス	
+zana0038	1ZANAH.BIN	9287A	92886	ハルバート	
+zana0039	1ZANAH.BIN	92886	92898	グレートアックス	
+zana0040	1ZANAH.BIN	92898	928AC	グレートスレイヤー	
+zana0041	1ZANAH.BIN	928AC	928BE	ラッキーブレード	
+zana0042	1ZANAH.BIN	928BE	928D0	ムラサメブレード	
+zana0043	1ZANAH.BIN	928D0	928E0	マジックメイス	
+zana0044	1ZANAH.BIN	928E0	928F4	マジックスレイヤー	
+zana0045	1ZANAH.BIN	928F4	92908	ドラゴンスレイヤー	
+zana0046	1ZANAH.BIN	92A18	92A22	ニードル	
+zana0047	1ZANAH.BIN	92A22	92A30	Ｄ・ニードル	
+zana0048	1ZANAH.BIN	92A30	92A3A	マインド	
+zana0049	1ZANAH.BIN	92A3A	92A46	ウォーター	
+zana0050	1ZANAH.BIN	92A46	92A50	ファイア	
+zana0051	1ZANAH.BIN	92A50	92A60	アールマインド	
+zana0052	1ZANAH.BIN	92A60	92A6A	サンダー	
+zana0053	1ZANAH.BIN	92A6A	92A74	ポイズン	
+zana0054	1ZANAH.BIN	92A74	92A84	Ｄ・ウォーター	
+zana0055	1ZANAH.BIN	92A84	92A92	Ｄ・ファイア	
+zana0056	1ZANAH.BIN	92A92	92A9A	ダーク	
+zana0057	1ZANAH.BIN	92A9A	92AA8	Ｄ・サンダー	
+zana0058	1ZANAH.BIN	92AA8	92AB2	ティルト	
+zana0059	1ZANAH.BIN	92AB2	92AC0	Ｄ・ポイズン	
+zana0060	1ZANAH.BIN	92AC0	92ACC	Ｄ・ダーク	
+zana0061	1ZANAH.BIN	92ACC	92ADA	Ｄ・ティルト	
+zana0062	1ZANAH.BIN	92BFE	92C06	マント	
+zana0063	1ZANAH.BIN	92C06	92C16	レザーアーマー	
+zana0064	1ZANAH.BIN	92C16	92C24	ライトメイル	
+zana0065	1ZANAH.BIN	92C24	92C32	ハードメイル	
+zana0066	1ZANAH.BIN	92C32	92C40	リングメイル	
+zana0067	1ZANAH.BIN	92C40	92C50	ウッドアーマー	
+zana0068	1ZANAH.BIN	92C50	92C60	チェインメイル	
+zana0069	1ZANAH.BIN	92C60	92C6E	ウッドメイル	
+zana0070	1ZANAH.BIN	92C6E	92C82	＋２レザーアーマー	
+zana0071	1ZANAH.BIN	92C82	92C92	ハーフプレート	
+zana0072	1ZANAH.BIN	92C92	92CA0	フルプレート	
+zana0073	1ZANAH.BIN	92CA0	92CB4	ハイレザーアーマー	
+zana0074	1ZANAH.BIN	92CB4	92CC2	リフレックス	
+zana0075	1ZANAH.BIN	92CC2	92CD6	＋２・リングメイル	
+zana0076	1ZANAH.BIN	92CD6	92CEA	＋２・フルプレート	
+zana0077	1ZANAH.BIN	92CEA	92CFE	＋２・リフレックス	
+zana0078	1ZANAH.BIN	92CFE	92D0C	バトルスーツ	
+zana0079	1ZANAH.BIN	92E68	92E72	グローブ	
+zana0080	1ZANAH.BIN	92E72	92E84	スモールシールド	
+zana0081	1ZANAH.BIN	92E84	92E94	ラージシールド	
+zana0082	1ZANAH.BIN	92E94	92EA8	Ｌｖ１－Ｓシールド	
+zana0083	1ZANAH.BIN	92EA8	92EBC	Ｌｖ１－Ｌシールド	
+zana0084	1ZANAH.BIN	92EBC	92ED0	Ｌｖ２－Ｓシールド	
+zana0085	1ZANAH.BIN	92ED0	92EE4	Ｌｖ２－Ｌシールド	
+zana0086	1ZANAH.BIN	92EE4	92EF8	Ｌｖ３－Ｓシールド	
+zana0087	1ZANAH.BIN	92EF8	92F0C	Ｌｖ３－Ｌシールド	
+zana0088	1ZANAH.BIN	92F0C	92F20	Ｌｖ４－Ｓシールド	
+zana0089	1ZANAH.BIN	92F20	92F34	Ｌｖ４－Ｌシールド	
+zana0090	1ZANAH.BIN	92F34	92F48	Ｌｖ５－Ｓシールド	
+zana0091	1ZANAH.BIN	92F48	92F5C	Ｌｖ５－Ｌシールド	
+zana0092	1ZANAH.BIN	92F5C	92F70	Ｌｖ６－Ｓシールド	
+zana0093	1ZANAH.BIN	92F70	92F84	Ｌｖ６－Ｌシールド	
+zana0094	1ZANAH.BIN	92F84	92F98	Ｌｖ７－Ｓシールド	
+zana0095	1ZANAH.BIN	92F98	92FAC	Ｌｖ７－Ｌシールド	
+zana0096	1ZANAH.BIN	92FAC	92FBE	ドラゴンシールド	
+zana0097	1ZANAH.BIN	93176	93186	スペクタクルズ	
+zana0098	1ZANAH.BIN	93186	9319A	レッド・ポーション	
+zana0099	1ZANAH.BIN	9319A	931A2	ランプ	
+zana0100	1ZANAH.BIN	931A2	931B6	ブラック・オニキス	
+zana0101	1ZANAH.BIN	931B6	931CA	ファイアクリスタル	
+zana0102	1ZANAH.BIN	931CA	931D4	マトック	
+zana0103	1ZANAH.BIN	931D4	931E2	アワーグラス	
+zana0104	1ZANAH.BIN	931E2	931F4	ウイング・ブーツ	
+zana0105	1ZANAH.BIN	931F4	931FE	マントル	
+zana0106	1ZANAH.BIN	931FE	93212	デーモンズ・リング	
+zana0107	1ZANAH.BIN	93212	9321C	バランス	
+zana0108	1ZANAH.BIN	9321C	9322C	キーペンダント	
+zana0109	1ZANAH.BIN	9322C	93238	キャンドル	
+zana0110	1ZANAH.BIN	93238	93240	ルビー	
+zana0111	1ZANAH.BIN	93240	93256	ブラウン・ポーション	
+zana0112	1ZANAH.BIN	93256	9325E	ミラー	
+zana0113	1ZANAH.BIN	9325E	93266	ボトル	
+zana0114	1ZANAH.BIN	93266	93270	クラウン	
+zana0115	1ZANAH.BIN	93276	93282	エクリサー	
+zana0116	1ZANAH.BIN	93282	93292	マッシュルーム	
+zana0117	1ZANAH.BIN	93292	932A6	ブラックポーション	
+zana0118	1ZANAH.BIN	932A6	932B0	ハンマー	
+zana0119	1ZANAH.BIN	932B0	932BC	ペンダント	
+zana0120	1ZANAH.BIN	932BC	932CE	ホーリーバイブル	
+zana0121	1ZANAH.BIN	932CE	932D6	ブーツ	
+zana0122	1ZANAH.BIN	932D6	932E8	マジック・グラブ	
+zana0123	1ZANAH.BIN	932E8	932F0	ロッド	
+zana0124	1ZANAH.BIN	932F0	932FC	クリスタル	
+zana0125	1ZANAH.BIN	93550	9357E	０１２３４５６７８９\n　\nどこで訓練するかね	
+zana0126	1ZANAH.BIN	935F4	9361C	武器屋だ。\n何か欲しい物がある\nかい？	
+zana0127	1ZANAH.BIN	93634	93656	いらっしゃい\nここは、魔法屋よ。	
+zana0128	1ZANAH.BIN	93676	936AE	ここは、防具屋。\n魔物にそなえてきち\nんと装備しなよ！	
+zana0129	1ZANAH.BIN	936D0	93710	よくきたな、ここは盾屋だ。\n欲しい物があるなら\nもっていきな！	
+zana0130	1ZANAH.BIN	9372E	93762	いらっしゃい　食料屋です。\n食料は足りてるかい\n？	
+zana0131	1ZANAH.BIN	93774	937B0	鍵屋だ。鍵がないと\nこの世界じゃやって\nけないぜイヒヒヒ！	
+zana0132	1ZANAH.BIN	937C4	937D8	治療をされますか？	
+zana0133	1ZANAH.BIN	937F0	93802	ここは教会です。	
+zana0134	1ZANAH.BIN	93814	93846	ここは、宿屋。\n１Ｇ払えば、\n１０ＨＰ回復するぜ	
+zana0135	1ZANAH.BIN	93860	938A2	　ここは、攻撃力を鍛える所だ！\n１０Ｐ＝１００Ｇ\n最高１００まで	
+zana0136	1ZANAH.BIN	938A2	938CE	　攻撃力が必要なら\nいつでも鍛えてやるぞ！	
+zana0137	1ZANAH.BIN	938CE	938F4	　おまえに教えることは\nなにもない。	
+zana0138	1ZANAH.BIN	9390E	93950	　ここは、魔法力を鍛える所じゃ\n１０Ｐ＝１００Ｇ\n最高１００まで	
+zana0139	1ZANAH.BIN	93950	93984	　魔法力が必要なら、\n　再び我が門をたたくがよい。	
+zana0140	1ZANAH.BIN	93984	939CE	　ワシが伝えることは、\n　もうなにもない。\n　旅立ち、己で鍛えるがよい！	
+zana0141	1ZANAH.BIN	939E8	93A2C	　ここは、あなたの知性を高めます\n１０Ｐ＝１００Ｇ\n最高１００まで	
+zana0142	1ZANAH.BIN	93A2C	93A60	　知力が必要なときは\n　いつでもいらしてください。	
+zana0143	1ZANAH.BIN	93A60	93AAE	　あなたには、十分知力が\n　満ちています。\n　教えることなど、もうありません	
+zana0144	1ZANAH.BIN	93AC8	93B0C	　手先の器用さを、ここで鍛えな！\n１０Ｐ＝１００Ｇ\n最高１００まで	
+zana0145	1ZANAH.BIN	93B0C	93B32	　器用さが必要なら、\n　またこいや。	
+zana0146	1ZANAH.BIN	93B32	93B78	　オレが伝えることは、\n　もうないや。\n　あとは、自分で経験つみな！	
+zana0147	1ZANAH.BIN	93B92	93BD2	　ここは、機敏さを鍛える所だ！\n５Ｐ＝１００Ｇ\n最高１００まで	
+zana0148	1ZANAH.BIN	93BD2	93BE0	　またこいよ	
+zana0149	1ZANAH.BIN	93BE0	93C2C	　それだけすばしっこければ\n　魔王に勝つこともできるだろう\n　がんばれよ！	
+zana0150	1ZANAH.BIN	93C46	93C8A	　あなたの魅力を、ここで鍛えて！\n１０Ｐ＝１００Ｇ\n最高１００まで	
+zana0151	1ZANAH.BIN	93C8A	93CD8	　もっと魅力的になりたければ\n　いつでも、もどっていらして\n　・・・・ねッ！	
+zana0152	1ZANAH.BIN	93CD8	93D2E	　あなたは、とてもステキよ！\n　もう、教えることなんかないわ。\n　うふっ、バイバーイ	
+zana0153	1ZANAH.BIN	93D48	93D84	　魔法防御力を鍛えましょう\n５Ｐ＝１００Ｇ\n最高１００まで	
+zana0154	1ZANAH.BIN	93D84	93DC0	　あなたに、\n　魔法の守りが必要なら\n　またいらっしゃい。	
+zana0155	1ZANAH.BIN	93DC0	93E18	　あなたをここで、これ以上\n　鍛えることは、出来ないわ。\n　魔守りの力のあらんことを！	
+zana0156	1ZANAH.BIN	93E38	93E4E	ここはアイテム屋よ。	
+zana0157	1ZANAH.BIN	93E68	93E7E	ここは王の部屋です。	
+zana0158	1ZANAH.BIN	93E90	93E9C	またこいよ	
+zana0159	1ZANAH.BIN	93EBA	93ED0	勇者よ汝の名を名乗れ	
+zana0160	1ZANAH.BIN	93F04	93F3C	勇者よ、そなたに\nドラゴンスレイヤーの地図を\n見せよう	
+zana0161	1ZANAH.BIN	93F3C	93FF4	ことの起こりは混沌たる流れにあり\nそのものに善悪の概念はなく\nただ力　流るるのみ\n力は森羅万象に及び\n創世の源として神々の世界へと舞い上がる\n　\n　\n　　　　　　　　クーブラ・カーン	
+zana0162	1ZANAH.BIN	93FF4	94092	ザナドゥはカオスの流れが集中する\n場所だった\nＢ・Ｄ１５００年\nクーブラ・カーンはその知識を有効に\n活用する為に千年王国ラムトールの地下\nにザナドゥを築いた	
+zana0163	1ZANAH.BIN	94092	94118	そこは　人の世界と暗黒界の接点\n逆流する暗黒界のカオスが足元で煮え滾る\nクーブラ・カーンが魔法で施した\n『見えない仕切り』も今はない	
+zana0164	1ZANAH.BIN	94118	9417E	見よ　汝の前に迷宮が広がる\nこの光明の都こそ\nかつて数百年の昔に隆盛を誇りし\n偉大なる王の遭産なのだ	
+zana0165	1ZANAH.BIN	9417E	941AA	汝の戦いは　神々の御言葉と共に記される今日	
+zana0166	1ZANAH.BIN	941AA	941BE	その終わりを告げた	
+zana0167	1ZANAH.BIN	941BE	941E2	汝の試練　大いなる意志を示す戦いは	
+zana0168	1ZANAH.BIN	941E2	941FA	勝利の杯をもって祝され	
+zana0169	1ZANAH.BIN	941FA	94228	天の輝きをもって営れなる　金のモールとなろう	
+zana0170	1ZANAH.BIN	94228	94252	この地にて　長きにわたる民の苦痛の叫びは	
+zana0171	1ZANAH.BIN	94252	94266	大いなる意志の化身	
+zana0172	1ZANAH.BIN	94266	9428C	即ち汝の手にする　選ばれし者の剣にて	
+zana0173	1ZANAH.BIN	9428C	942AC	悪しき種とともに　取り除かれた	
+zana0174	1ZANAH.BIN	942AC	942CC	見よ　重苦しく築かれし死の砦は	
+zana0175	1ZANAH.BIN	942CC	942FC	輝きを地にもたらす　壮麗なる碑としてよみがえる	
+zana0176	1ZANAH.BIN	942FC	94318	壁と塔にかこまれしその姿は	
+zana0177	1ZANAH.BIN	94318	94328	内にも　外にも	
+zana0178	1ZANAH.BIN	94328	94352	叡知の徴として　その姿を地に映すであろう	
+zana0179	1ZANAH.BIN	94352	94378	エイジアの　大いなる先祖にして王なる	
+zana0180	1ZANAH.BIN	94378	9439C	クーブラ・カーンの姿は取り戻された	
+zana0181	1ZANAH.BIN	9439C	943BC	まもなく地の子らが再び頭を下げ	
+zana0182	1ZANAH.BIN	943BC	943DA	幼き香りの精逹が風と共に踊り	
+zana0183	1ZANAH.BIN	943DA	94404	生命の泉より注がれる聖なるアレフの流れは	
+zana0184	1ZANAH.BIN	94404	94422	あまねくこの地を潤すであろう	
+zana0185	1ZANAH.BIN	94422	9444E	聞け　人及ばぬ永遠の果てに還元される流れが	
+zana0186	1ZANAH.BIN	9444E	94476	偉大なる祖先の声と代わり響きわたるのを	
+zana0187	1ZANAH.BIN	94476	944A8	民の嘆きとうめきが　汝と神々を讃える唄になるのを	
+zana0188	1ZANAH.BIN	944A8	944CA	もはや　永き時の流れによってさえ	
+zana0189	1ZANAH.BIN	944CA	944F0	なにひとつ流されることはないであろう	
+zana0190	1ZANAH.BIN	944F0	94516	しかし　天と地がわけられしその時より	
+zana0191	1ZANAH.BIN	94516	94532	悪しき種は氷のごとく蒔かれ	
+zana0192	1ZANAH.BIN	94532	94554	悲しみの涙　流されたる血にて潤い	
+zana0193	1ZANAH.BIN	94554	94572	堕ちたる果実をその枝につける	
+zana0194	1ZANAH.BIN	94572	9459A	おお　蒔かれたる地　怒涛の大海のごとく	
+zana0195	1ZANAH.BIN	9459A	945C4	おお　その数　うちよせられたる砂のごとく	
+zana0196	1ZANAH.BIN	945C4	945DA	吹きあげられたる者は	
+zana0197	1ZANAH.BIN	945DA	9460C	汝に無数の魂が奏でる　悲哀の唄をささやくであろう	
+zana0198	1ZANAH.BIN	9460C	9462A	それは　汝を求める民逹の祈り	
+zana0199	1ZANAH.BIN	9462A	9464A	そこは　汝の耕すべき新たなる地	
+zana0200	1ZANAH.BIN	9464A	9466E	流れし神々の涙は　汝を導くであろう	
+zana0201	1ZANAH.BIN	9466E	94694	　　　汝の手より剣が離れることはない	
+zana0202	1ZANAH.BIN	94694	946BE	　　　おお　神々の御手にのせられたる者よ	
+zana0203	1ZANAH.BIN	946BE	946D8	　　　新たなる旅の時まで	
+zana0204	1ZANAH.BIN	946D8	94700	　　　その魂に安らぎを与えるがよかろう	
+zana0205	1ZANAH.BIN	94700	94724	　　　　　　　　　　　ラスプーチン	
+zana0206	1ZANAH.BIN	94724	94752	今宵は、３００年に一度\n３つの星の集いし時。	
+zana0207	1ZANAH.BIN	94752	947B0	今こそ、魔王ガルシスに尋われし\n地下の聖地「ザナドゥ」を取り戻す\n３００年に一度の機会じゃ。	
+zana0208	1ZANAH.BIN	947B0	947F8	地下の迷宮になりし要塞、\n「ザナドゥ」に挑む勇者よ、\n汝の名をなのれ！	
+zana0209	1ZANAH.BIN	947F8	94830	では、勇者よ！\nこれらの物と支度金を\nそなたに託そう。	
+zana0210	1ZANAH.BIN	94830	94860	７つの道場で、己の力を磨き\nその能力を高めよ。	
+zana0211	1ZANAH.BIN	94860	948A6	７つの道場で己の力を磨き\nその能力を高めるか？\nそれとも旅に出るか？	
+zana0212	1ZANAH.BIN	948A6	948E2	勇者よ、\nこの能力で、問題がなけば\nただちに、旅立つが良い	
+zana0213	1ZANAH.BIN	948E2	94948	勇者よ、\n決しておごることなかれ！\n汝が弱きときには、弱き身を持って\n未来の鍵に希望をつなぐが良い。	
+zana0214	1ZANAH.BIN	94948	949A4	勇者よ、\nどんな魔物であろうとも、\n四度その姿を蹴散らせ！\nさすれば、再び現れる事はない。	
+zana0215	1ZANAH.BIN	949A4	949FC	勇者よ、\n魔王ガルシスの命を受けた者逹が\n「ザナドゥ」の４つの王冠を\n守り続けている。	
+zana0216	1ZANAH.BIN	949FC	94A60	勇者たるもの、\n不要な殺生は控えるが良い。\n王冠「レヴィック」は、\n決して血塗られたものを喜ばぬ。	
+zana0217	1ZANAH.BIN	94A60	94AAE	勇者よ、\nこの道の先には、\n王冠「レヴィック」の眠る\n水面の塔が建っている。	
+zana0218	1ZANAH.BIN	94AAE	94B1A	勇者よ、\nもし己の「業」の深さを悔やむなら\nその身をもって、後悔の印とせよ。\nその印とともに「業」は去る。	
+zana0219	1ZANAH.BIN	94B1A	94B80	勇者は常に賢くあれ！\nすべての宝を、ただあさるのは\n盗賊にまかせるがよい。\n未来を見据えて行動せよ！	
+zana0220	1ZANAH.BIN	94B80	94BCC	勇者よ、\n王冠「クォージィ」は、\n忌まわしき触手に\nその身をゆだねている。	
+zana0221	1ZANAH.BIN	94BCC	94C30	勇者よ、\n「ザナドゥ」の統治者の証、\n４つの王冠を集めるものは、\nこの聖地をとりもどす資格を持つ。	
+zana0222	1ZANAH.BIN	94C30	94C8C	勇者よ、\n塔の中には、魔王ガルシスの手で\n空間がねじ曲げられたものもある。\n惑わされるな！	
+zana0223	1ZANAH.BIN	94C8C	94CDE	勇者よ、\nタイミングと勇気を持って\n壁をこわせば、道が広がるときも\nあるだろう。	
+zana0224	1ZANAH.BIN	94CDE	94D3E	勇者よ、\n敵の姿が見えなくとも進むがよい。\n王冠「タイタン」は、\n４つの王冠が集まる時を待つ。	
+zana0225	1ZANAH.BIN	94D3E	94D9C	勇者よ、\n時には壁を抜け、奧に進むがよい。\n目には写らなかった世界が\n広がる時もあるだろう。	
+zana0226	1ZANAH.BIN	94D9C	94DF2	勇者よ、\n次なる世界には３つの塔が\n隠されている。\nそのすべてを見つけだす事を祈る。	
+zana0227	1ZANAH.BIN	94DF2	94E46	勇者よ、\n己の前にまっすぐに広がる道のみが\n道ではない。\n時には地図の力を借りよ！	
+zana0228	1ZANAH.BIN	94E46	94EA0	知恵の無き者には、\n王冠「サグリュイレス」を\n手にすることは出来ぬだろう。\n目には目を！	
+zana0229	1ZANAH.BIN	94EA0	94EDE	勇者よ、\n空を自在に飛ぶ者は\n３番目の塔を見つけだすだろう。	
+zana0230	1ZANAH.BIN	94EDE	94F30	４つの王冠をもち、\nその身の正しき者に\nドラゴンスレイヤーは\n抱かれるであろう。	
+zana0231	1ZANAH.BIN	94F30	94F82	４つの王冠をもち、\nその身の正しき者に\nドラゴンスレイヤーは\n抱かれるであろう。	
+zana0232	1ZANAH.BIN	94F82	94FB8	神の声が聞こえる・・・\n　\n勇者よ我が助けが必要か？	
+zana0233	1ZANAH.BIN	94FB8	94FF8	食料がなくなると\nどんどん体力がへってゆくんだ\n気をつけてな！	
+zana0234	1ZANAH.BIN	94FF8	95038	レベルがあがると\n食料がへるのもはやくなるんだ\n気をつけてな！	
+zana0235	1ZANAH.BIN	95038	95080	腹が減っては戦はできぬ！\n食料が足りなくなったら\nいつでもよっとくれ！	
+zana0236	1ZANAH.BIN	95080	950D4	この世界の品物はすべて限られてる\n食料にしても、ムダにしないことだ\n気をつけてな！	
+zana0237	1ZANAH.BIN	950D4	95128	この世界の品物はすべて限られてる\n食料にしても、ムダにしないことだ\n気をつけてな！	
+zana0238	1ZANAH.BIN	95128	95170	腹が減っては戦はできぬ！\n食料が足りなくなったら\nいつでもよっとくれ！	
+zana0239	1ZANAH.BIN	95170	951C4	この世界の品物はすべて限られてる\n食料にしても、ムダにしないことだ\n気をつけてな！	
+zana0240	1ZANAH.BIN	951C4	9520C	腹が減っては戦はできぬ！\n食料が足りなくなったら\nいつでもよっとくれ！	
+zana0241	1ZANAH.BIN	9520C	95260	この世界の品物はすべて限られてる\n食料にしても、ムダにしないことだ\n気をつけてな！	
+zana0242	1ZANAH.BIN	95260	952A8	腹が減っては戦はできぬ！\n食料が足りなくなったら\nいつでもよっとくれ！	
+zana0243	1ZANAH.BIN	952A8	952E0	鍵がないと、この世界じゃ\nやってけないぜ、イヒヒヒヒ！	
+zana0244	1ZANAH.BIN	952E0	95328	自分のレベルが上がると\n値上がりする物があるのさ。\n気をつけることだ！	
+zana0245	1ZANAH.BIN	95328	95372	このフロアーには、\n魔王ガルシスが何かを隠したという\nうわさがあるのさ。	
+zana0246	1ZANAH.BIN	95372	953C2	敵から攻撃をうけると\n受けた方こうによってそれぞれの防\n具の経験値があがるのさ	
+zana0247	1ZANAH.BIN	953C2	953FA	鍵がないと、この世界じゃ\nやってけないぜ、イヒヒヒヒ！	
+zana0248	1ZANAH.BIN	953FA	9544A	敵から攻撃をうけると\n受けた方こうによってそれぞれの防\n具の経験値があがるのさ	
+zana0249	1ZANAH.BIN	9544A	95494	このフロアーには、\n魔王ガルシスが何かを隠したという\nうわさがあるのさ。	
+zana0250	1ZANAH.BIN	95494	954CC	鍵がないと、この世界じゃ\nやってけないぜ、イヒヒヒヒ！	
+zana0251	1ZANAH.BIN	954CC	95516	このフロアーには、\n魔王ガルシスが何かを隠したという\nうわさがあるのさ。	
+zana0252	1ZANAH.BIN	95516	95560	このフロアーには、\n魔王ガルシスが何かを隠したという\nうわさがあるのさ。	
+zana0253	1ZANAH.BIN	95560	955B0	宿屋やポーションをうまく使うのが\nこの世界で生きてくコツだぜ！\nまた、こいよ！	
+zana0254	1ZANAH.BIN	955B0	955FA	敵を倒すとき\n最後の敵は武器で倒したほうが\n何かとトクだぜ、知ってたか？	
+zana0255	1ZANAH.BIN	955FA	95646	敵の中には\n下手に殺すととんでもない物を\nせおわすヤツがいる、気をつけな！	
+zana0256	1ZANAH.BIN	95646	95696	ブラックポーションをのむと\n体力と引きかえに、\n「カルマ」がへるって話しだぜ！	
+zana0257	1ZANAH.BIN	95696	956E0	敵を倒すとき\n最後の敵は武器で倒したほうが\n何かとトクだぜ、知ってたか？	
+zana0258	1ZANAH.BIN	956E0	9571C	自分のステータスをあげるには\nアイテムをうまく使うことだ。	
+zana0259	1ZANAH.BIN	9571C	95776	この世界のものは限りがある\n頭を使ってアイテムを使わないと\nこの先にはすすめなくなるぜ！	
+zana0260	1ZANAH.BIN	95776	957B8	この世界のどこかに\nドラゴンスレイヤーが\n隠されてるって話しだ。	
+zana0261	1ZANAH.BIN	957B8	957FC	４つの王冠は\nここが聖地だったころの\n力の象徴だったという話しだ。	
+zana0262	1ZANAH.BIN	957FC	95854	魔王ガルシアを倒すための勇者が\nこのフロアーにきたって話しだ。\nおまえ、しってるかい？	
+zana0263	1ZANAH.BIN	95C7E	95CA4	　（株）放送出版プランニングセンター	
+zana0264	1ZANAH.BIN	95CA4	95CC0	　（株）東急エージェンシー	
+zana0265	1ZANAH.BIN	95CC0	95CD8	　（株）原宿サン・アド	
+zana0266	1ZANAH.BIN	95D2A	95D56	　　高久　　浩　　　（日本ビクター（株））	
+zana0267	1ZANAH.BIN	95D56	95D82	　　鶴谷　　浩一　　（日本ビクター（株））	
+zana0268	1ZANAH.BIN	95D82	95DAE	　　緒方　　登志也　（日本ビクター（株））	
+zana0269	1ZANAH.BIN	95DAE	95DDA	　　中村　　幸一郎　（日本ビクター（株））	
+zana0270	1ZANAH.BIN	95DDA	95DEA	　　小野　　郁	
+zana0271	1ZANAH.BIN	95DEA	95DFA	　　制作総指揮	
+zana0272	1ZANAH.BIN	95DFA	95E0C	　　山崎　　伸治	
+zana0273	1ZANAH.BIN	95E0C	95E38	　　大木　　正明　　（日本ビクター（株））	
+zana0274	1ZANAH.BIN	95E3C	95E4E	　　加藤　　正幸	

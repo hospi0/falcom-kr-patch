@@ -1,0 +1,18 @@
+# 허용 목록: 소스·문서·번역 텍스트만(ROM·스테이트·디스크 추출·빌드·my files 금지)
+*
+!.gitignore
+!README.md
+!tools/
+!tools/*.py
+!docs/
+!docs/*.md
+!work/
+!work/text/
+!work/text/*.tsv
+!work/tr_override/
+!work/tr_override/*.tsv
+!work/tr_fix/
+!work/tr_fix/*.tsv
+!work/tr_add/
+!work/tr_add/*.tsv
+!work/terms.tsv
