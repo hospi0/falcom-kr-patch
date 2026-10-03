@@ -691,6 +691,7 @@ YS2_ITEM = (0x29946, 0x2C126, 0x2C75E, 0x2C838)          # 문장 구역 시작�
 YS2_SYS = (0x45BE2, 0x467DC, (0x467E4, 0x46888), (0x46918, 0x46A58))
 YS2_MUSIC = (0x290F0, 0x2944C)
 YS2_BOLDLIM = 0xE0 + 384
+YS2_DRAWLIM = 0x355                 # ★한자 칸 0x355‥0x359 는 화면에 안 그려진다(원본도 0x354 까지만 씀 · 실기 2026-10-04 「획득」의 「획」(0x355) 안 보임) → 음절 789칸
 YS2_MIDREFS = {('DAT01.BIN', 0x9002), ('DAT03.BIN', 0x9E9C)}
 APOS['ys2'] = [(0x30, 0xE0, 0x2E208), (0xE0, 0xE0 + 634, 0x30E08)]
 APOS['ys2b'] = [(0x30, 0xE0, 0x3B208), (0xE0, YS2_BOLDLIM, 0x3DE08)]
@@ -806,7 +807,7 @@ def ys2_alloc(items):
             if '가' <= ch <= '힣' or ch in SPECIAL:
                 syl[ch] += 1
                 if it['both']: con.add(ch)
-    sl = list(range(0x30, 0xD0)) + list(range(0xE0, ystext.limit('ys2')))
+    sl = list(range(0x30, 0xD0)) + list(range(0xE0, YS2_DRAWLIM))
     order = sorted(con, key=lambda c: (-syl[c], c)) + sorted(set(syl) - con, key=lambda c: (-syl[c], c))
     if len(order) > len(sl): raise SystemExit('⛔이스 II 글자 칸 부족: 필요 %d · 칸 %d' % (len(order), len(sl)))
     amap = {ch: sl[i] for i, ch in enumerate(order)}

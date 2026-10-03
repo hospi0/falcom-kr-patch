@@ -24,6 +24,7 @@ SRC = os.path.join(ROOT, 'work', 'movie', 'fc2')
 OUT = os.path.join(ROOT, 'work', 'movie', 'kr')
 DISC = {'YS2_MOV01': ['YS2/MOV01', 'SUN/YS2OP.CAK'], 'YS2_MOV02': ['YS2/MOV02']}
 PUNCT_SP = re.compile(r'([,.!?:;)\]}\'"~、。，．！？：；）］｝」』】〉》”’…‥・·～〜♪♥]) (?! )')
+BORROW = 65536                        # 프레임 사이에 빌려 쓸 수 있는 바이트(2026-10-04 오프닝 0:30 «이스의 책을…» 뭉개짐)
 LADDER = (0, 1000, 2000, 4000, 7000, 12000, 20000, 35000, 60000, 100000, 200000)   # ★-q:v 는 cinepak 에 거의 안 먹음 → global_quality(λ)
 
 
@@ -114,7 +115,7 @@ def burn(name, ev, log):
     tmp = os.path.join(ROOT, 'work', 'movie', '_enc'); os.makedirs(tmp, exist_ok=True)
     paths = [os.path.join(kr, 'f%04d.png' % (f + 1)) for f in changed]
     cand = {}                                            # q → 새턴식 프레임 목록(changed 순서)
-    chunks = list(film['chunks']); carry = 0; used = {}
+    chunks = list(film['chunks']); carry = BORROW; used = {}            # 어두운 장면은 원본 프레임이 아주 작아 자막이 뭉개진다 → 앞당겨 쓸 몫(전체는 원본 크기 안, 끝에서 검사)
     for k, f in enumerate(changed):
         budget = len(film['chunks'][vid[f]])
         pick = None

@@ -22,7 +22,7 @@ def _zana_cap(no):
 
 ROWCAP = {'zana': _zana_cap}
 LINECAP = {'zana': lambda no: 7 <= int(no) <= 158}   # 가게·도장·아이템: 줄마다 원문 그 줄 길이까지(도장·가게 창이 글 위에 겹침, 실기 스샷) — 자동 접기 안 함
-SPW = {'zana': 1.0, 'ys1': 1.0, 'ys2': 0.6, 'sun': 1.0}                       # 이스 II: 공백 = 전각 0x000(16px) — E10/E08 은 «멈춤»(실기 스샷: 줄 머리 E10 이 들여쓰기 안 됨)                                   # 제나두는 반각 공백 코드가 없어 빈 칸(12px) = 1칸
+SPW = {'zana': 1.0, 'ys1': 1.0, 'ys2': 0.75, 'sun': 1.0}                       # 이스 II: 공백 = 전각 0x000(16px) — E10/E08 은 «멈춤»(실기 스샷: 줄 머리 E10 이 들여쓰기 안 됨)                                   # 제나두는 반각 공백 코드가 없어 빈 칸(12px) = 1칸
 PUNCT = set(',.!?:;)]}\'"~、。，．！？：；）］｝」』】〉》”’…‥・·～〜♪♥')
 
 
@@ -381,6 +381,22 @@ def fit(tr, src, lim, boxl=0, g=None):
     return PG.join(res), bad
 
 
+
+def _ys2_latin_names(tr):
+    """이스 II 영문 장비 이름(원문 그대로)이 원문처럼 «－» 앞뒤 두 줄로 쪼개져 있으면 한 줄로 붙이고(사용자 2026-10-04 «무기 중간 -에서 무조건 줄바꿈»),
+    이름+꼬리가 가게 창 9칸을 넘으면 꼬리를 띄어 쓸 수 있는 말로 바꿔 다음 줄로 넘긴다(조사만 혼자 줄 머리에 남지 않게):
+    군./이군?/군?/요？/인가. → « 말이군./말이군?/말이죠？/말인가.» · 는/은(뒤에 값) → « 가격은»"""
+    BS = chr(92)
+    def lat(x): return re.search('[Ａ-Ｚ]', x) and not re.search('[가-힣ぁ-んァ-ヶ一-龥]', x)
+    tr = re.sub(r'\{FE3\}([^{' + BS * 2 + r']+?)' + BS * 2 + r'n[ 　]+([^{' + BS * 2 + r']+?)\{FE4\}',
+                lambda m: '{FE3}' + m.group(1).strip(' 　') + m.group(2).strip(' 　') + '{FE4}' if lat(m.group(1) + m.group(2)) else m.group(0), tr)
+    TAIL = {'군.': ' 말이군.', '이군?': ' 말이군?', '군?': ' 말이군?', '요？': ' 말이죠？', '인가.': ' 말인가.', '는': ' 가격은', '은': ' 가격은', '는,': ' 가격은,'}
+    def fix(m):
+        name, tail = m.group(1), m.group(2)
+        if not lat(name) or W(name) + W(tail) <= 9 or tail not in TAIL: return m.group(0)
+        return '{FE3}' + name + '{FE4}' + TAIL[tail]
+    return re.sub(r'\{FE3\}([^{' + BS * 2 + r']+)\{FE4\}([^ ' + BS * 2 + r'{]+)', fix, tr)
+
 def restore_brackets(src, tr):
     """원문 『』「」 를 번역이 '…' / "…" 로 바꿔 놓았으면 원래 괄호로 되돌린다(원문 토큰 보존 — 사용자 규칙)"""
     for (o, c), q in ((('『', '』'), "'"), (('「', '」'), '"')):
@@ -419,7 +435,7 @@ def depunct(s):
 
 def translations(g, lim=None):
     """→ {원문: 번역}(고침·접기·부호 공백 처리 끝난 것), 문제 목록"""
-    lim0 = lim or CAP[g]; fx = load_fix(g); terms = load_terms(g); res = {}; probs = []; SP[0] = SPW.get(g, 0.5); LAT[0] = 0.75 if g == 'ys1' else 0.7 if g == 'ys2' else 1.0; FWSP[0] = 0.6 if g == 'ys2' else 1.0
+    lim0 = lim or CAP[g]; fx = load_fix(g); terms = load_terms(g); res = {}; probs = []; SP[0] = SPW.get(g, 0.5); LAT[0] = 0.75 if g in ('ys1', 'ys2') else 1.0; FWSP[0] = 0.75 if g == 'ys2' else 1.0
     for r in load_rows(g):
         lim = ROWCAP[g](r['no']) if g in ROWCAP and lim0 == CAP[g] else lim0
         src, tr = r['src'], r['tr']
@@ -452,8 +468,11 @@ def translations(g, lim=None):
             _f, _a = r['pos'].split(':')
             if _f == 'YS2_0YS2L.BIN' and 0x45BE2 <= int(_a, 16) < 0x467DC:   # 시스템 목록(획득 창 꼬리 등)은 E10 이 멈춤이 아니라 다음 글자를 먹는다(실기 2026-10-04 「바노아 편지 / 득」) → 진짜 공백
                 tr = tr.replace('{E10}', '　')
+                if re.fullmatch('[^　]　.+', src):            # ★획득 창 꼬리 「を　手に入れた。」 = [이름 줄에 붙는 1자][버려지는 1자 — 줄바꿈][둘째 줄]
+                    tr = '　　' + tr.strip(' 　')          #   (실기 2026-10-04 「바노아 편지 / 득」: 둘째 자리 「획」이 버려짐) → 빈칸 두 개 뒤에 둘째 줄
             # 원문이 긴 영문 이름을 두 줄로 쪼갠 자리(「ＳＨＯＲＴ／　　　－ＳＷＯＲＤ」) — «한글» 이름이면 한 줄로 붙인다(실기 2026-10-04 「숏/　　소드인가」). 줄 머리 공백 처리 뒤에 해야 줄 번호가 안 어긋남
             tr = re.sub(r'\{FE3\}([^{\\]+?)\\n[ 　]+([^{\\]+?)\{FE4\}', lambda mm: mm.group(0) if not re.search('[가-힣]', mm.group(0)) else '{FE3}' + mm.group(1).strip(' 　') + (' ' if (mm.group(1).strip(' 　') + ' ' + mm.group(2).strip(' 　')) in _ALLTR.setdefault(g, chr(10).join(x['tr'] for x in load_rows(g))) else '') + mm.group(2).strip(' 　') + '{FE4}', tr)
+            tr = _ys2_latin_names(tr)
         CUR['pos'] = r['pos']; CUR['src'] = src; CUR['gap'] = 0
         if g in LINECAP and LINECAP[g](r['no']):
             so, to = src.split(NL), tr.split(NL); bad = []

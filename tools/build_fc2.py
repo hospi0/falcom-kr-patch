@@ -41,7 +41,7 @@ def main():
     import moviesub
     for name, paths in moviesub.DISC.items():
         p = os.path.join(moviesub.OUT, name)
-        if not os.path.exists(p): continue
+        if not os.path.exists(p) or '--nomovie' in a: continue
         b = open(p, 'rb').read()
         for n in paths:
             assert len(b) == len(disc.read('fc2', n)), ('동영상 크기 다름', n)
