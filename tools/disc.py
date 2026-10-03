@@ -11,7 +11,7 @@ sys.path.append(r'C:\claude\project\anearth-kr-patch\tools')      # cdmode1 (iso
 import iso
 
 TRACK = {
-    'fc1': r'C:\claude\roms\ss\Falcom Classics (Japan) (Disc 1) (Game Disc)\Falcom Classics (Japan) (Disc 1) (Game Disc) (Track 01).bin',
+    'fc1': r'C:\claude\roms\ss\완료\Falcom Classics (Japan) (Disc 1) (Game Disc)\Falcom Classics (Japan) (Disc 1) (Game Disc) (Track 01).bin',
     'fc2': r'C:\claude\roms\ss\Falcom Classics II (Japan)\Falcom Classics II (Japan) (Track 1).bin',
 }
 DISC = os.path.join(ROOT, 'work', 'disc')

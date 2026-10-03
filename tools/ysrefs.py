@@ -80,7 +80,7 @@ def refs(game):
                     S = B + 2 * v[i]
                     if B <= S < E and (S == B or v[S // 2 - 1] == 0xFFF or v[S // 2 - 1] < lim) and S // 2 != i:
                         j = S // 2
-                        while j < len(v) and j - S // 2 < 400 and (v[j] < lim or 0xE00 <= v[j] <= 0xFFE):
+                        while j < len(v) and j - S // 2 < 4000 and (v[j] < lim or 0xE00 <= v[j] <= 0xFFE):
                             j += 1
                         if j < len(v) and v[j] == 0xFFF and j > S // 2:
                             out.append((f, B, i * 2, v[i - 1], S))
