@@ -10,6 +10,7 @@ sys.path.insert(0, HERE)
 import disc
 
 VER = 'v0.9'
+VER2 = 'v0.91'                        # 2편 (2026-10-04 에필로그 자막)
 XDELTA = r'C:\claude\utils\xdelta.exe'
 NAME = 'FalcomClassics_KR_' + VER
 TITLE = '팔콤 클래식 (세가 새턴 일본판) 한글 패치 ' + VER
@@ -17,7 +18,7 @@ ROMNAME = 'Falcom Classics (Japan) (Disc 1) (Game Disc)'
 TRACKS = 18
 TNO = '01'
 GAME = 'fc1'
-FC2 = dict(NAME='FalcomClassics2_KR_' + VER, TITLE='팔콤 클래식 II (세가 새턴 일본판) 한글 패치 ' + VER,
+FC2 = dict(NAME='FalcomClassics2_KR_' + VER2, TITLE='팔콤 클래식 II (세가 새턴 일본판) 한글 패치 ' + VER2,
            ROMNAME='Falcom Classics II (Japan)', TRACKS=2, TNO='1', GAME='fc2')
 
 
