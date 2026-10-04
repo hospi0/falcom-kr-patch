@@ -119,6 +119,29 @@ YS1 = dict(
 )
 
 
+# ★스크립트가 문장 «안쪽»을 가리키는 곳(실기 2026-10-04 사라: 「예」 답이면 설명을 건너뛰고 4쪽 「いま、この水晶は」부터 찍음 →
+#   안 고치면 옛 바이트 자리 = 번역 한복판 「러 가 / 주실 수 있나요?」). {문장 시작: 번역에서 그 쪽 머리 글} — 그 글은 반드시 쪽 머리(\p 뒤)여야 한다.
+#   새 안쪽 참조가 나오면 빌드 중단(조용히 어긋나지 않게).
+YS1_INNER = {0x86F80: '지금,', 0x8111A: '도적의'}
+# ★엔딩 스태프 롤 일본어 13줄(L 0x7CFD2‥0x7D12E, 표 0x7D6E6 13칸 [가운데 맞춤][오프셋] 기준 0x7CFD2) — 추출에서 빠져 한글로 덮인 칸으로 찍혔음(실기 2026-10-04).
+#   나머지 스태프 줄(0x7CB20‥)은 원래 영문. 이름은 일본어 읽기(거센소리 규칙). ⚠️高久浩·小野郁 읽기는 추정.
+YS1_STAFF = {
+    '\u3000㈱放送出版プランニングセンター': '\u3000㈱방송출판 플래닝센터',
+    '㈱東急エージェンシー': '㈱도큐 에이전시',
+    '㈱原宿サン・アド': '㈱하라주쿠 산 애드',
+    '制作総指揮': '제작 총지휘',
+    '\u3000\u3000高久\u3000\u3000浩\u3000\u3000（日本ビクター㈱）': '\u3000\u3000타카쿠\u3000히로시（일본 빅터㈱）',
+    '\u3000\u3000鶴谷\u3000\u3000浩一\u3000（日本ビクター㈱）': '\u3000\u3000츠루야\u3000코이치（일본 빅터㈱）',
+    '\u3000\u3000緒方\u3000\u3000登志也（日本ビクター㈱）': '\u3000\u3000오가타\u3000토시야（일본 빅터㈱）',
+    '\u3000\u3000中村\u3000\u3000幸一郎（日本ビクター㈱）': '\u3000\u3000나카무라\u3000코이치로（일본 빅터㈱）',
+    '小野\u3000\u3000郁': '오노\u3000카오루',
+    '山崎\u3000\u3000伸治': '야마자키\u3000신지',
+    '\u3000\u3000大木\u3000\u3000正明\u3000（日本ビクター㈱）': '\u3000\u3000오키\u3000마사아키（일본 빅터㈱）',
+    '加藤\u3000\u3000正幸': '카토\u3000마사유키',
+    '\u3000\u3000\u3000\u3000\u3000\u3000（日本ビクター㈱）': '\u3000\u3000\u3000\u3000\u3000\u3000（일본 빅터㈱）',
+}
+
+
 def u16s(b):
     return list(struct.unpack('>%dH' % (len(b) // 2), b))
 
@@ -228,6 +251,108 @@ def fix_recs(L, L0, ta, te, base, posmap, lens, newbase=None, order='ao', run=Fa
     return n, q
 
 
+# ★이스 I 그림 글자 «기록»(실기 2026-10-04 인벤토리 «크리스탈» 마지막 글자가 첫 글자 위로 되감김 · 클래식 책 숫자·부호가 줄마다 위로 밀림):
+#   기록 4B = [폭 칸<<3 | 간격][세트<<4 | 종류][문자열 번호]. 폭 표 L 0x7D288 u16×32 = (글자 수 N, 줄 수). 그리는 함수(0x2CD040)가
+#   스프라이트 폭 = N × (세트 기준 글꼴 폭) 을 8 배수로 올림 — 기준 글꼴 = 세트 [영문·가나·한자][기준 칸] 중 기준 칸(세트 0‥5 는 거의 영문 칸).
+#   → 문자열이 아니라 N 으로 폭을 정하므로, 한글(16px)이 기준 글꼴(10·12px)보다 넓으면 넘친 화소가 다음 줄 머리로 되감긴다.
+#   목록 묶음 표 L 0x7D71C(8B × 8: [기록 표][문자열 기준]) — 옛 기록의 «줄 번호 표»(0x7D3F2·0x7D4CE·0x7D4D2)는 이 기록 표였다.
+YS1_RECS = [(0x7D2C8, 0x7D370), (0x7D65E, 0x7D6E6), (0x7D4D2, 0x7D626), (0x7D3F2, 0x7D4CE), (0x7D4CE, 0x7D4D2), (0x7D3EE, 0x7D3F2),
+            (0x7D642, 0x7D65E), (0x7D626, 0x7D642)]
+YS1_BOOK_CLASSIC_W = 184          # 클래식 책 창 글 폭(원본 기록 18×10px) — 세트 2 로 바꾼 뒤 기록은 (16,3) = 192px
+
+
+def ys1_set_fonts(L, s):
+    e = 0xA0E6C + 8 * s; f = L[e + 4:e + 7]
+    return f, f[L[e + 7]]
+
+
+def ys1_font_w(L, f):
+    return L[0xA0E14 + 8 * f + 2]
+
+
+def ys1_rec_text(L, q, t):
+    """기록 q(표 t 안) → (세트, 폭 칸, 문자열 코드 FFF 까지)"""
+    g = [i for i, (a, e) in enumerate(YS1_RECS) if a == t][0]
+    assert struct.unpack_from('>I', L, 0x7D71C + 8 * g)[0] == 0x200000 + t, hex(t)
+    base = struct.unpack_from('>I', L, 0x7D71C + 8 * g + 4)[0] - 0x200000
+    b0, b1, ix = L[q], L[q + 1], struct.unpack_from('>H', L, q + 2)[0]
+    typ = b1 & 15
+    a = {1: 0x7B20A + 2 * struct.unpack_from('>H', L, 0x7D140 + 2 * ix)[0], 2: 0x7CB20 + 2 * ix, 3: 0x7CFD2 + 2 * ix}.get(typ, base + 2 * ix)
+    return b1 >> 4, b0 >> 3, string_codes(L, a)
+
+
+def ys1_drawn(L, s, cs, ln, book):
+    """세트 s 로 그린 줄들의 (가장 넓은 줄 px, 쪽당 가장 많은 줄 수). 목록 줄(FFD 끝)은 ln 줄만, 책(FFE 쪽·FFF 끝)은 전부"""
+    f, _ = ys1_set_fonts(L, s); w = best = 0; lines = 1; most = 1; seen = 0
+    for c in cs:
+        if c in (0xFFD, 0xFFE, 0xFFF):
+            best = max(best, w); w = 0
+            if c == 0xFFF: break
+            if c == 0xFFD:
+                seen += 1
+                if not book and seen >= ln: break
+                lines += 1
+            else:
+                lines = 1
+            most = max(most, lines); continue
+        if c >= 0xE00: continue
+        w += ys1_font_w(L, f[0] if c < 0x30 else f[1] if c < 0xE0 else f[2])
+    return max(best, w), most
+
+
+def ys1_fix_rec_widths(L):
+    """모든 기록: 그린 폭이 기록 폭(8 배수)을 넘으면 같은 줄 수의 더 큰 폭 칸으로. 못 맞추거나 줄 수가 넘치면 빌드 중단 → 바꾼 [(기록, 옛 N, 새 N)]"""
+    WT = [(L[0x7D288 + 2 * i], L[0x7D289 + 2 * i]) for i in range(32)]
+    out = []
+    for t, te in YS1_RECS:
+        for q in range(t, te, 4):
+            s, k, cs = ys1_rec_text(L, q, t)
+            # ★높이 = 줄 수 × 기준 글꼴 높이 — 세트 3·4·5(기준 10×12·8×12·8×8)에 한글(16px)이면 아래 4줄이 잘린다(실기 2026-10-04 «크»의 ㅡ)
+            #   → 한글 든 기록은 세트 1(리메이크 이름표: [5,1,2] 기준 1번 16×16)로
+            body = cs[:next((i for i, c in enumerate(cs) if c >= 0xFFD), len(cs))] if t not in (0x7D626, 0x7D642) else cs
+            if s in (3, 4, 5) and any(0x30 <= c < 0xE00 for c in body) and L[0xA0E14 + 8 * ys1_set_fonts(L, s)[1] + 3] < 16:
+                L[q + 1] = 0x10 | (L[q + 1] & 15); s = 1; out.append((hex(q), 'set', 1))
+            N, ln = WT[k]; rw = ys1_font_w(L, ys1_set_fonts(L, s)[1])
+            if any(0x30 <= c < 0xE00 for c in body) and L[0xA0E14 + 8 * ys1_set_fonts(L, s)[1] + 3] * ln < 16:
+                raise SystemExit('⛔이스 I 기록 0x%X 높이 부족(세트 %d)' % (q, s))
+            dw, dl = ys1_drawn(L, s, cs, ln, t in (0x7D626, 0x7D642))
+            if dl > ln: raise SystemExit('⛔이스 I 기록 0x%X 줄 수 %d > %d' % (q, dl, ln))
+            if dw <= (N * rw + 7) // 8 * 8: continue
+            ok = [i for i, (n2, l2) in enumerate(WT) if l2 == ln and (n2 * rw + 7) // 8 * 8 >= dw]
+            if not ok: raise SystemExit('⛔이스 I 기록 0x%X 폭 %dpx 를 담을 폭 칸 없음(줄 %d)' % (q, dw, ln))
+            k2 = min(ok, key=lambda i: WT[i][0]); L[q] = (k2 << 3) | (L[q] & 7); out.append((hex(q), N, WT[k2][0]))
+    return out
+
+
+def ys1_fold_book(tr, W, cw, maxl=3):
+    """책 번역 한 문자열: 쪽마다 줄 폭 ≤ W px·줄 수 ≤ maxl 이면 그대로, 아니면 그 쪽을 낱말 단위로 다시 접고 maxl 줄씩 쪽 나눔.
+    줄 이음 = 공백(앞 줄이 부호로 끝나면 붙임 — 부호 뒤 공백 금지). ⛔낱말 한복판 자르지 않음(한 낱말이 W 넘으면 빌드 중단)."""
+    width = lambda x: sum(cw(c) for c in x)
+    pages = []
+    for pg in tr.split(PG):
+        lines = pg.split(NL)
+        if len(lines) <= maxl and all(width(x) <= W for x in lines):
+            pages.append(pg); continue
+        words = []                                   # [(낱말, 앞 이음)]
+        for li, x in enumerate(lines):
+            for wi, wd in enumerate(x.split(' ')):
+                if not wd: continue
+                glue = ' ' if wi else ('' if li == 0 else ('' if re.search(r'[,.!?，．！？、。…]$', lines[li - 1]) else ' '))
+                words.append((wd, glue))
+        out = []; cur = ''
+        for wd, glue in words:
+            if width(wd) > W: raise SystemExit('⛔이스 I 책 낱말이 창 폭 초과 %r' % wd)
+            if cur and width(cur + glue + wd) <= W: cur += glue + wd
+            else:
+                if cur: out.append(cur)
+                cur = wd
+        if cur: out.append(cur)
+        np_ = -(-len(out) // maxl); i = 0                     # 쪽 수는 최소로, 줄은 고르게(4줄 → 2+2 — 한 줄짜리 고아 쪽 안 만듦)
+        for k in range(np_):
+            n = -(-(len(out) - i) // (np_ - k)); pages.append(NL.join(out[i:i + n])); i += n
+    return PG.join(pages)
+
+
 def string_codes(L, a):
     v = []; i = a
     while True:
@@ -245,6 +370,15 @@ def build_ys1_text(L, trmap, amap):
     #   엔딩·저장 경고·오프닝 [0x79B1C,0x7A474) 기준 0x79B18: u16 표 0x7A474‥(엔딩) · u16 0x7A5E0(경고) · [오프셋][위치] 13칸 0x7A5E2(오프닝)
     #   시스템 [0x7B20A,0x7BBFE): u16 표 0x7D140‥0x7D200(아이템 이름 96) · [가운데 맞춤][오프셋] 0x7D2C8‥ · 0x7D3EE 1칸 (0x7D3F2·0x7D4CE·0x7D4D2 는 줄 «번호» 표 → 순서만 지키면 됨)
     L0 = bytes(L)
+    # ★클래식 모드 엔딩(히라가나판 0405‥, L 0x79EAA‥0x7A274): 줄마다 160px 그림 = 16px 한글 10칸 — 넘치면 줄 머리로 되돌아와 겹친다(실기 2026-10-04)
+    _v = u16s(L0[0x79E90:0x7A274]); _cur = []; _over = []
+    for _c in _v:
+        if _c in (0xFFD, 0xFFF):
+            _t = trmap.get(ystext.decode(_cur, m))
+            if _t is not None and len(_t.replace(NL, ' ').replace(PG, ' ')) > 10: _over.append(_t)
+            _cur = []
+        else: _cur.append(_c)
+    if _over: raise SystemExit('⛔이스 I 클래식 엔딩 10칸 초과 %d: %s' % (len(_over), _over[:5]))
     out, pm, ln = relayout(L0, 0x79B1C, 0x7A474, trmap, game, amap, inv)
     L[0x79B1C:0x7A474] = fit_region(out, 0x79B1C, 0x7A474)
     n1, q = fix_u16(L, L0, 0x7A474, 0x7A52C, 0x79B18, pm, run=True); assert q <= 0x7A52C
@@ -260,12 +394,38 @@ def build_ys1_text(L, trmap, amap):
     # 책 두 무리(히라가나판 0x7BBFE + 한자판 0x7C470) 합쳐 깔고: 한자판 기준 포인터 L 0x7D750 + 쪽 표 0x7D626(히라)·0x7D642(한자) 7칸씩
     A, M, E = 0x7BBFE, 0x7C470, 0x7CB20
     assert struct.unpack_from('>I', L0, 0x7D750)[0] == 0x200000 + M and struct.unpack_from('>I', L0, 0x7D758)[0] == 0x200000 + A
-    out, pm, ln = relayout(L0, A, E, trmap, game, amap, inv, seps=(0xFFF,), join=False)
+    # ★책 창(실기 2026-10-04 «6명의»·따옴표가 윗줄로 밀림, 4번째 줄 «.»만 보임): 클래식 책 기록은 세트 3(영문 10×12 = 줄 간격 14, 한글 18)
+    #   → 세트 2(전부 16px 높이, 집 안 창과 같음)로 바꾸고 3줄 칸(16,3)=192px. 번역은 184px(원본 글 폭)·3줄로 접고 넘치면 쪽 나눔.
+    #   리메이크 책 = 세트 0(전부 16px) 기록 (16,3) = 256px·3줄.
+    _cwc = {}
+    def _cw(eng):
+        def f(ch):
+            if ch not in _cwc: _cwc[ch] = encode(game, ch, amap, inv)[0]
+            return eng if _cwc[ch] < 0x30 else 16
+        return f
+    trb = dict(trmap); nfold = 0
+    for lo, hi, W, eng in ((A, M, YS1_BOOK_CLASSIC_W, 12), (M, E, 256, 16)):
+        p = lo
+        while p < hi:
+            cs = string_codes(L0, p); src = ystext.decode(cs[:-1], m); p += 2 * len(cs)
+            if trmap.get(src) is None: continue
+            new = ys1_fold_book(trmap[src], W, _cw(eng))
+            if new != trmap[src]: trb[src] = new; nfold += 1
+    out, pm, ln = relayout(L0, A, E, trb, game, amap, inv, seps=(0xFFF,), join=False)
     L[A:E] = fit_region(out, A, E)
     NM = pm[M]; struct.pack_into('>I', L, 0x7D750, 0x200000 + NM)
     n6, _ = fix_recs(L, L0, 0x7D626, 0x7D642, A, pm, ln); n7, _ = fix_recs(L, L0, 0x7D642, 0x7D65E, M, pm, ln, newbase=NM)
     assert n6 == 7 and n7 == 7, (n6, n7)
-    print('  이스 I 목록 표: 엔딩 %d · 오프닝 %d · 아이템 %d · 기록 %d · 책 %d+%d' % (n1, n2, n3, n4 + n5, n6, n7))
+    assert struct.unpack_from('>H', L0, 0x7D288 + 2 * 29)[0] == 0x1003            # 폭 칸 29 = (16자, 3줄)
+    for q in range(0x7D626, 0x7D642, 4):
+        assert L[q + 1] >> 4 == 3; L[q + 1] = 0x20 | (L[q + 1] & 15)
+        if L0[0x7D289 + 2 * (L[q] >> 3)] == 4: L[q] = (29 << 3) | (L[q] & 7)
+    print('  이스 I 책: 다시 접은 문자열 %d · 클래식 기록 세트 3→2' % nfold)
+    # 엔딩 스태프 롤 일본어 13줄(YS1_STAFF) — 다시 깔고 가운데 맞춤 표 고침
+    out, pm, ln = relayout(L0, 0x7CFD2, 0x7D12E, trmap, game, amap, inv)
+    L[0x7CFD2:0x7D12E] = fit_region(out, 0x7CFD2, 0x7D12E)
+    n8, _ = fix_recs(L, L0, 0x7D6E6, 0x7D71A, 0x7CFD2, pm, ln); assert n8 == 13, n8
+    print('  이스 I 목록 표: 엔딩 %d · 오프닝 %d · 아이템 %d · 기록 %d · 책 %d+%d · 스태프 %d' % (n1, n2, n3, n4 + n5, n6, n7, n8))
     # ② 묶음
     S, bl = model(game)
     blocks = bl[os.path.basename(YS1['file'])]
@@ -324,10 +484,31 @@ def build_ys1_text(L, trmap, amap):
                     if all(x is None for x in area[pos:pos + len(c)]): break
                     pos += 1
                 area[pos:pos + len(c)] = c; newpos[s['a']] = pos; pos += len(c)
+            # 문장 안쪽 참조(쪽 FFE·줄 FFD 바로 뒤를 가리킴) — 번역의 같은 내용 쪽 머리로
+            inner = []
+            for s in mine:
+                for q in range(s['a'] + 2, s['e'] - 2, 2):
+                    if v_all[q // 2 - 1] not in (0xFFE, 0xFFD): continue
+                    w = (q - B) // 2
+                    hits = [i for i in range(1, len(sv)) if sv[i] == w and sv[i - 1] in YS1['ops']]
+                    if not hits: continue
+                    base = newpos.get(s['a'], (s['a'] - T0) // 2 if not refpos[s['a']] else None)   # 시작 참조 없는 문장 = 제자리
+                    if s['a'] not in YS1_INNER or base is None:
+                        raise SystemExit('⛔이스 I 문장 안쪽 참조 미처리 0x%X+%d (스크립트 0x%X) — YS1_INNER 에 쪽 머리 글 지정' % (s['a'], q - s['a'], B + 2 * hits[0]))
+                    tr = trmap.get(s['src']); pages = tr.split(PG)
+                    k = next((j for j, pg in enumerate(pages) if j and pg.startswith(YS1_INNER[s['a']])), None)
+                    if k is None: raise SystemExit('⛔이스 I 안쪽 참조 0x%X: 번역에 «%s» 로 시작하는 쪽이 없음' % (s['a'], YS1_INNER[s['a']]))
+                    c = enc[s['a']]; idx = [j for j, x in enumerate(c) if x == 0xFFE]
+                    if len(idx) < k: raise SystemExit('⛔이스 I 안쪽 참조 0x%X: 쪽 코드 수 %d < %d' % (s['a'], len(idx), k))
+                    inner.append((hits, base + idx[k - 1] + 1))
             for s in mine:
                 if s['a'] in newpos:
                     w = (T0 - B) // 2 + newpos[s['a']]
                     for i in refpos[s['a']]: sv[i] = w
+            for hits, np_ in inner:
+                for i in hits: sv[i] = (T0 - B) // 2 + np_
+                print('  이스 I 문장 안쪽 참조 고침 0x%X → 쪽 머리' % (B + 2 * hits[0]))
+            for s in mine:
                 # ★오리지널 모드 선택지(op 0x52): 인자 [문장][?][개수<<8|기본][선택지 줄 번호…] — 번역에서 줄 번호 다시 계산(커서 = 줄 번호×줄 간격)
                 if 0x7D75C <= s['a'] < 0x84E9C and trmap.get(s['src']) is not None:
                     for i in refpos[s['a']]:
@@ -441,7 +622,7 @@ def write_font(game, L, amap):
 
 
 # ── 이스 I 전체(빌드에서 부름) ─────────────────────────────────────────────────
-YS1_ALLOWED = [(0xA0E80, 0xA0E82), (0xA0E89, 0xA0E8A), (0xA0E91, 0xA0E92), (0xA0E99, 0xA0E9A), (0x79B1C, 0x7CB20), (0x7D140, 0x7D200), (0x7D2C8, 0x7D3F2), (0x7D626, 0x7D65E), (0x7D750, 0x7D75C), (0x7D75C, 0x8E988), (0x8F5D4, 0x9A5D4)]
+YS1_ALLOWED = [(0xA0E80, 0xA0E82), (0xA0E89, 0xA0E8A), (0xA0E91, 0xA0E92), (0xA0E99, 0xA0E9A), (0x79B1C, 0x7CB20), (0x7D140, 0x7D200), (0x7D2C8, 0x7D65E), (0x7CFD2, 0x7D12E), (0x7D6E6, 0x7D71A), (0x7D750, 0x7D75C), (0x7D75C, 0x8E988), (0x8F5D4, 0x9A5D4)]
 
 
 def ys1_house_chars(trmap, m):
@@ -485,6 +666,7 @@ def ys1_house_chars(trmap, m):
 def build_ys1(L0):
     """원본 L → 한글 L (문장·묶음·글꼴). 바뀐 바이트가 허용 범위 밖이면 중단"""
     trmap, probs = ystrans.translations('ys1')
+    trmap.update(YS1_STAFF)                                          # 엔딩 스태프 롤 일본어 줄
     m = ystext.charmap('ys1')
     hira = ystext.decode(string_codes(L0, 0x7BBFE)[:-1], m)          # 히라가나판 「ハダル」(번역 TSV 에 빠짐)
     kanji = ystext.decode(string_codes(L0, 0x7C470)[:-1], m)
@@ -492,7 +674,10 @@ def build_ys1(L0):
         trmap[hira] = trmap[kanji]
     # ⛔ys1_house_chars(16px 전용 글자) 안 씀 — 집 안 창을 글꼴 세트 2 로 연다(아래 FF03→FF02)
     amap = alloc('ys1', trmap)
+    del CHOICE_FIX[:]
     L, nb, bl = build_ys1_text(L0, trmap, amap)
+    # ★오리지널 선택지 줄 번호 다시 계산이 빠지면 커서가 원문 줄(예: 촌장 7·9번째 줄)로 간다(실기 2026-10-04 — 들여쓰기 실수로 안쪽 참조 묶음에서만 돌았음)
+    if len(CHOICE_FIX) != 40: raise SystemExit('⛔이스 I 오리지널 선택지 줄 번호 고침 %d ≠ 40' % len(CHOICE_FIX))
     L, na, moved = layout_ys1(L, nb, bl)
     L = write_font('ys1', L, amap)
     # ★오리지널 모드 = 글꼴 세트 2(표 X L 0xA0E70: 세트마다 [영문·가나·한자 글꼴 표 칸] 8B). 원래 [3,4,2] = 영문·가나 12×12 + 한자 16px
@@ -508,6 +693,8 @@ def build_ys1(L0):
         if vv[i] == 0x4C and vv[i + 1] == 0xFF03:
             struct.pack_into('>H', L, 2 * i + 2, 0xFF02); nf += 1
     if nf != 9: raise SystemExit('⛔이스 I 집 안 창 004C FF03 개수 %d ≠ 9' % nf)
+    rw = ys1_fix_rec_widths(L)                        # 그림 글자 기록 폭(글꼴 세트까지 다 정한 뒤)
+    print('  이스 I 기록 폭 올림 %d: %s' % (len(rw), rw))
     L = bytes(L)
     a = np.frombuffer(L0, np.uint8); b = np.frombuffer(L, np.uint8)
     diff = np.nonzero(a != b)[0]

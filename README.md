@@ -1,9 +1,9 @@
 # 팔콤 클래식 (새턴 JP) 한글화
 
 ## 내려받기
-- 최신 **v0.9** — [릴리즈](https://github.com/hospi0/falcom-kr-patch/releases/latest)에서 `FalcomClassics_KR_v0.9.zip`
+- 최신 **v0.91** — [릴리즈](https://github.com/hospi0/falcom-kr-patch/releases/latest)에서 `FalcomClassics_KR_v0.91.zip`
 - 대상: `Falcom Classics (Japan) (Disc 1) (Game Disc)` 트랙 01 (트랙 18개)
-- 원본md5 `287ADC660E0D65E5AE3600157DB6C9D5` → 패치md5 `ACAD85FCF05B7F6F18D4BEF5BC29F406`
+- 원본md5 `287ADC660E0D65E5AE3600157DB6C9D5` → 패치md5 `EA88C646CDCEA81DEC59FBE60BB5A67C`
 - 이스 I(보통·오리지널 모드) · 제나두 · 드래곤 슬레이어(그림 글자) · 타이틀 메뉴
 
 ## 작업 저장소

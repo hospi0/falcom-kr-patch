@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import disc
 
-VER = 'v0.9'
+VER = 'v0.91'                         # 1편 (2026-10-04 인벤토리 이름표·클래식 책·선택지 커서·라바 층 대사·MAIL-RING)
 VER2 = 'v0.91'                        # 2편 (2026-10-04 에필로그 자막)
 XDELTA = r'C:\claude\utils\xdelta.exe'
 NAME = 'FalcomClassics_KR_' + VER

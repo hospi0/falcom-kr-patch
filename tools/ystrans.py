@@ -49,6 +49,11 @@ def load_rows(g):
     for r in out:
         if r['no'] in ov:
             t = ov[r['no']]
+            # ★번호 착각 막기(2026-10-04: 자물쇠 문장으로 알고 «0128 잠겨있다»를 넣었는데 0128 은 다른 대사 — 라바 층에서 «잠겨있다» 제보).
+            #   오버라이드 번호 = 번역 파일 번호(추출 번호 ys1NNNN 과 다를 수 있음). 3줄 이상 대사를 1/4 길이 미만으로 덮으면 중단.
+            n_old = r['tr'].count(NL) + r['tr'].count(PG) + 1
+            if t != '=원문' and r['tr'] and n_old >= 3 and len(t) * 4 < len(r['tr']):
+                raise SystemExit('⛔오버라이드 %s %s 가 원래 번역보다 너무 짧음(번호 착각?) — 원문 %r → %r' % (g, r['no'], r['src'][:30], t[:20]))
             if t == '=원문':
                 r['tr'] = r['src']
             else:                                   # {FFB} 뒤 인자 = 원문 인자 차례대로(원래 코드값)
